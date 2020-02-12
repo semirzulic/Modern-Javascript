@@ -67,7 +67,7 @@ class Store {
     }
 
     static displayBooks() {
-        const books =Store.getBooks();
+        const books = Store.getBooks();
 
         books.forEach(function(book) {
             const ui = new UI;
@@ -78,7 +78,7 @@ class Store {
     }
 
     static addBook(book) {
-        const books =Store.getBooks();
+        const books = Store.getBooks();
 
         books.push(book);
 
@@ -86,7 +86,7 @@ class Store {
     }
 
     static removeBook(isbn) {
-        const books =Store.getBooks();
+        const books = Store.getBooks();
 
         books.forEach(function(book, index) {
             if(book.isbn === isbn) {

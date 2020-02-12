@@ -61,6 +61,60 @@ UI.prototype.showAlert = function (message, className) {
 
 }
 
+// Get Books From Local Storage
+UI.prototype.getBooksFromLocalStorage = function () {
+    let books;
+    if(localStorage.getItem('books') === null) {
+        books = [];
+    } else {
+        books = JSON.parse(localStorage.getItem('books'));
+    }
+    return books;
+}
+
+// Store Books To Local Storage
+UI.prototype.storeBooksInLocalStorage = function(book) {
+    // Instantiate UI
+    const ui = new UI();
+
+    const books = ui.getBooksFromLocalStorage();
+
+    books.push(book);
+
+    localStorage.setItem('books', JSON.stringify(books));
+}
+
+// Display books from Local Storage
+UI.prototype.displayBooks = function() {
+    // Instantiate UI
+    const ui = new UI();
+    const books = ui.getBooksFromLocalStorage();
+
+    books.forEach(function(book) {
+        const ui = new UI;
+
+        // Add book to UI
+        ui.addBookToList(book);
+    });
+}
+
+// Remove books from Local Storage
+UI.prototype.removeBook = function(isbn) {
+    // Instantiate UI
+    const ui = new UI();
+
+    const books = ui.getBooksFromLocalStorage();
+
+    books.forEach(function(book, index) {
+        if(book.isbn === isbn) {
+            books.splice(index, 1);
+        }
+    });
+
+    localStorage.setItem('books', JSON.stringify(books));
+}
+
+
 
 // Event Listeners for add book
 document.getElementById('book-form').addEventListener('submit', function(e) {
@@ -83,6 +137,9 @@ document.getElementById('book-form').addEventListener('submit', function(e) {
         // Add Book to list
         ui.addBookToList(book);
 
+        // Add to Local Storage
+        ui.storeBooksInLocalStorage(book);
+
         // Show success
         ui.showAlert('Book Added', 'success');
         // Clear Fields
@@ -104,10 +161,21 @@ document.getElementById('book-list').addEventListener('click', function(e) {
     if(e.target.className === 'delete') {
         ui.deleteBook(e.target);
 
+        // Remove from local storage
+        ui.removeBook(e.target.parentElement.previousElementSibling.textContent);
+
         //Show Alert
         ui.showAlert('Book Removed', 'success');
     }
     
 
     e.preventDefault();
+});
+
+
+// DOM load event
+document.addEventListener('DOMContentLoaded', function () {
+    // Instantiate UI
+    const ui = new UI();
+    ui.displayBooks();
 });
